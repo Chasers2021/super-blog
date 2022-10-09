@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import { setupNaive } from '@/plugins'
 
-
+import 'highlight.js/styles/idea.css'
 async function bootstrap(){
 
     const app = createApp(App)
