@@ -46,8 +46,6 @@ onMounted(() => {
     xhtml: false
   });
   initEditor()
-
- 
 });
 
 

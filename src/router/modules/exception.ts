@@ -10,7 +10,8 @@ import type { RouteRecordRaw } from 'vue-router'
  * @param meta.keepAlive 缓存该路由
  * @param meta.sort 排序越小越排前
  *
- * */
+ **/
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/exception',

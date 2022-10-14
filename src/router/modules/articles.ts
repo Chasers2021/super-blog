@@ -1,4 +1,2 @@
-const routes: Array<RouteRecordRaw> = [
+const routes: Array<RouteRecordRaw> = [];
 
-    
-]
