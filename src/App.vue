@@ -28,8 +28,8 @@
 </template>
 <script setup lang="ts">
   import { RouterLink, RouterView } from "vue-router";
-  import { ref } from "vue"
-  import { darkTheme ,NConfigProvider} from 'naive-ui'
+  import { ref } from "vue";
+  import { darkTheme ,NConfigProvider} from 'naive-ui';
   const theme = ref('');
   </script>
   

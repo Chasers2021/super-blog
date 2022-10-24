@@ -1,7 +1,6 @@
+<template>
+  <div class="about">404</div>
+</template>
 
-    
-    <template>
-        <div class="about">404</div>
-      </template>
-      <script setup lang="ts">
-      </script>
+<script setup lang="ts">
+</script>

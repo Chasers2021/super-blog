@@ -20,19 +20,17 @@
     NMessageProvider,
     NLoadingBarProvider,
   } from 'naive-ui';
-  import { MessageContent } from '@/components/MessageContent';
-  import { DialogContent } from '@/components/DialogContent';
 
   export default defineComponent({
     name: 'Application',
+
     components: {
       NDialogProvider,
       NNotificationProvider,
       NMessageProvider,
       NLoadingBarProvider,
-      MessageContent,
-      DialogContent,
     },
+
     setup() {
       return {};
     },
