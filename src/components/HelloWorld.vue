@@ -1,8 +1,8 @@
+
 <script setup lang="ts">
 defineProps<{
   msg: string
-}>()
-export default {}
+}>();
 </script>
 
 <template>
