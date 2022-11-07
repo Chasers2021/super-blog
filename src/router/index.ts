@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 const Category = () => import('@/views/category/index.vue');
+const Article = () => import('@/views/article/index.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,7 @@ const router = createRouter({
     {
       path: '/article',
       name: 'article',
-      component: () => import('@/components/editor/editor.vue'),
+      component: Article,
       meta: {
         name: '文章管理'
       }

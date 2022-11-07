@@ -1,9 +1,11 @@
 
 <template>
   <n-config-provider :theme="theme" class="config-provider">
-    <layout class="layout">
-      <router-view />
-    </layout>
+    <n-notification-provider>
+      <layout class="layout">
+        <router-view />
+      </layout>
+    </n-notification-provider>
   </n-config-provider>
 </template>
 
@@ -11,7 +13,7 @@
   import { RouterView } from "vue-router";
   import Layout from './layout/index.vue';
   import { ref } from "vue";
-  import { darkTheme ,NConfigProvider } from 'naive-ui';
+  import { darkTheme, NConfigProvider } from 'naive-ui';
   const theme = ref(darkTheme);
 </script>
 

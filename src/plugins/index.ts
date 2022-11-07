@@ -1,2 +1,3 @@
-// export { setupMarkdown } from '@/plugins/markdown';
 export { setupNaive } from '@/plugins/naive';
+
+export { service } from '@/plugins/http';
