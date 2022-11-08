@@ -1,36 +1,42 @@
 <template>
   <div class="main">
     <header class="header">分类列表</header>
-    <n-card title="卡片插槽示例">
+    <n-card v-for="item in categories" :key="item.id">
       <template #header>
-        分类1
+        {{ item.name }}
       </template>
-      分类描述内容
-      <template #footer>
-       分类描述
+      <template #default>
+        {{ item.description }}
+      </template>
+      <template #action>
+        <n-icon size="14">
+          <create-outline />
+        </n-icon>
+        <n-icon size="14">
+          <trash />
+        </n-icon>
       </template>
     </n-card>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { onMounted } from 'vue';
+  import { ref } from 'vue';
   import { getCategories } from '@/api/category';
-  import { useNotification } from 'naive-ui';
-  const notification = useNotification();
+  import { Trash, CreateOutline } from '@vicons/ionicons5';
+  
+  interface Category {
+    name: string,
+    id: number,
+    description: string
+  }
 
-  onMounted(async () => {
-    try {
-      await getCategories();
-    } catch (error) {
-      notification.warning({
-        content: '说点啥呢',
-        meta: '想不出来',
-        duration: 1500,
-        keepAliveOnHover: true
-      });
-    }
-  });
+  const categories = ref<Category[]>([]);
+  const fetchList = async () => {
+    const res = await getCategories();
+    categories.value = res.data.list;
+  };
+  fetchList();
 </script>
 
 <style lang="less" scoped>

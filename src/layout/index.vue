@@ -56,10 +56,11 @@
 <style lang="less" scoped>
   .main {
     padding: 0 20px;
+
     .title {
-      padding-left: 20px;
       height: 80px;
       line-height: 80px;
+      padding-left: 20px;
       background-color: rgb(24, 24, 28);
     }
   }

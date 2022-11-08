@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-  import { RouterView } from "vue-router";
+  import { RouterView } from 'vue-router';
   import Layout from './layout/index.vue';
-  import { ref } from "vue";
+  import { ref } from 'vue';
   import { darkTheme, NConfigProvider } from 'naive-ui';
   const theme = ref(darkTheme);
 </script>

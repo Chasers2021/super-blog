@@ -6,7 +6,7 @@ import axios, {
 
 export const service: AxiosInstance = axios.create({
   timeout: 5000,
-  baseURL: '/dev'
+  baseURL: '/'
 });
 
 service.interceptors.request.use(
