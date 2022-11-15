@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 const Category = () => import('@/views/category/index.vue');
+const Tag = () => import('@/views/tag/index.vue');
 const Article = () => import('@/views/article/index.vue');
 
 const router = createRouter({
@@ -16,6 +17,14 @@ const router = createRouter({
       component: Category,
       meta: {
         name: '分类管理'
+      }
+    },
+    {
+      path: '/tag',
+      name: 'tag',
+      component: Tag,
+      meta: {
+        name: '标签管理'
       }
     },
     {

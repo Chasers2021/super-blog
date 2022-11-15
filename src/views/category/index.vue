@@ -6,6 +6,7 @@
         + 创建分类
       </n-button>
     </header>
+
     <main class="main-content">
       <n-card v-for="item in categories" :key="item.id" class="category-card">
         <template #header>{{ item.name }}</template>
@@ -122,6 +123,7 @@
   const handleConfirm = async () => {
     await categoryFormRef.value?.validate();
     let meta = '';
+
     if (isUpdate.value) {
       await updateCategoty(categoryForm.id as unknown as number, categoryForm);
       meta = '该分类完成修改';
@@ -129,12 +131,12 @@
       await createCategory(categoryForm);
       meta = '该分类完成创建';
     }
-    notification.success({
-      content: '操作成功!',
-      meta,
-      duration: 1500,
-      keepAliveOnHover: true
+
+    notification.success({ 
+      content: '操作成功!', meta,
+      duration: 1500, keepAliveOnHover: true
     });
+
     visible.value = false;
     await fetchList();
   };
@@ -156,12 +158,12 @@
       negativeText: '取消',
       onPositiveClick: async () => {
         await deleteCategoty(category.id as number);
+
         notification.success({
-          content: '操作成功!',
-          meta: '该分类已删除',
-          duration: 1500,
-          keepAliveOnHover: true
+          content: '操作成功!', meta: '该分类已删除',
+          duration: 1500, keepAliveOnHover: true 
         });
+
         await fetchList();
       }
     });

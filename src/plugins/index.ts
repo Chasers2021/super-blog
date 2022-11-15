@@ -1,3 +1,3 @@
 export { setupNaive } from '@/plugins/naive';
 
-export { service } from '@/plugins/http';
+export { http } from '@/plugins/http';

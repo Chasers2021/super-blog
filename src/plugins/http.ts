@@ -4,12 +4,12 @@ import axios, {
   type AxiosResponse 
 } from 'axios';
 
-export const service: AxiosInstance = axios.create({
+export const http: AxiosInstance = axios.create({
   timeout: 5000,
   baseURL: '/'
 });
 
-service.interceptors.request.use(
+http.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
     return config;
   },
@@ -18,7 +18,7 @@ service.interceptors.request.use(
   }
 );
 
-service.interceptors.response.use(
+http.interceptors.response.use(
   (response: AxiosResponse) => {
     return response.data;
   },
