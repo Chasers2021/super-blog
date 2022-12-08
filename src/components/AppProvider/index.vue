@@ -9,5 +9,5 @@
 </template>
 
 <script lang="ts" setup>
-import { NDialogProvider, NNotificationProvider, NLoadingBarProvider } from 'naive-ui';
+  import { NDialogProvider, NNotificationProvider, NLoadingBarProvider } from 'naive-ui';
 </script>

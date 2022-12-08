@@ -70,8 +70,13 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, reactive, ref } from 'vue';
-  import { getCategories, createCategory, updateCategoty, deleteCategoty } from '@/api/category';
+  import { computed, reactive, ref, onMounted } from 'vue';
+  import {
+    getCategories,
+    createCategory,
+    updateCategoty,
+    deleteCategoty
+  } from '@/api/category';
   import { Trash, CreateOutline } from '@vicons/ionicons5';
   import { useDialog, useNotification, type FormInst } from 'naive-ui';
 
@@ -89,7 +94,10 @@
     const res = await getCategories();
     categories.value = res.data.list;
   };
-  fetchList();
+
+  onMounted(() => {
+    fetchList();
+  });
 
   const visible = ref(false);
   const handleCreate = () => visible.value = true;
