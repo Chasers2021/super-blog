@@ -141,7 +141,7 @@
   const handleDelete = (row: any) => {
     row.id && dialog.warning({
       title: '警告',
-      content: '确定删除改标签吗？',
+      content: '确定删除该标签吗?',
       positiveText: '确定',
       negativeText: '取消',
       onPositiveClick: async () => {

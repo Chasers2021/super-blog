@@ -1,15 +1,125 @@
 <template>
   <div class="main">
     <header class="header"></header>
-    <editor v-model:editor-content="editorContent"/>
+
+    <n-grid x-gap="20" style="padding: 12px;">
+      <n-gi :span="17">
+        <n-form
+          ref="articleFormRef"
+          :model="articleForm"
+          :rules="rules"
+        >
+          <n-form-item label="标题: " path="title">
+            <n-input 
+              v-model:value="articleForm.title" 
+              clearable
+              :allow-input="inputTrim" 
+              placeholder="输入名称" 
+            />
+          </n-form-item>
+    
+          <n-form-item label="描述: ">
+            <n-input
+              v-model:value="articleForm.description" 
+              type="textarea"
+              clearable
+              :allow-input="inputTrim"
+              placeholder="输入描述" 
+            />
+          </n-form-item>
+    
+          <n-form-item label="标签: ">
+            <n-space>
+              <n-tag
+                type="info"
+                v-for="item in tagList"
+                :key="item.id"
+                v-model:checked="item.checked" 
+                checkable
+              >
+                {{ item.name }}
+              </n-tag>
+            </n-space>
+          </n-form-item>
+    
+          <n-form-item label="内容: " path="content">
+            <editor v-model:editor-content="articleForm.content" />
+          </n-form-item>
+        </n-form>
+      </n-gi>
+
+      <n-gi :span="7">
+        <n-form
+          ref="articleFormOptsRef"
+          :model="articleFormOpts"
+          :rules="optsRules"
+        >    
+          <n-form-item label="分类: ">
+            <n-checkbox-group v-model:value="articleFormOpts.categotyIdList">
+              <n-space item-style="display: flex;">
+                <n-checkbox 
+                  v-for="item in categoryList" 
+                  :key="item.id"
+                  :value="item.id"
+                  :label="item.name" />
+              </n-space>
+            </n-checkbox-group>
+          </n-form-item>
+        </n-form>
+        <n-button type="primary" style="width: 100%;">
+          提交
+        </n-button>
+      </n-gi>
+    </n-grid>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { getTags } from '@/api/tag';
+  import { getCategories } from '@/api/category';
+  import { ref, reactive, onMounted } from 'vue';
   import Editor from '@/components/Editor/index.vue';
+  import type { FormInst } from 'naive-ui';
 
-  const editorContent = ref('');
+  const articleFormRef = ref<FormInst | null>(null);
+  const articleFormOptsRef = ref<FormInst | null>(null);
+  const inputTrim = (value: string) => !value.startsWith(' ') && !value.endsWith(' ');
+  const articleForm = reactive({
+    title: '',
+    description: '',
+    content: ''
+  });
+  const rules = {
+    title: { required: true, message: '请输入标题', trigger: 'blur' },
+    content: { required: true, message: '请输入内容', trigger: 'blur' }
+  };
+
+  const articleFormOpts = reactive({
+    categotyIdList: []
+  });
+  const optsRules = {};
+  const categoryList = ref<any []>([]);
+  const fetchCategoryList = async () => {
+    const res = await getCategories();
+    categoryList.value = res.data.list;
+  };
+
+  const tagList = ref<any []>([]);
+  const fetchList = async () => {
+    const res = await getTags({
+      pageSize: 999,
+      page: 1
+    });
+    tagList.value = res.data.list.map((item: { checked: boolean; }) => {
+      item.checked = false;
+      return item;
+    });
+  };
+
+  onMounted(() => {
+    fetchList();
+    fetchCategoryList();
+  });
 </script>
 
 <style lang="less" scoped>
