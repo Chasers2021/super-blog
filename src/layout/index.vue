@@ -28,26 +28,35 @@
 
 <script setup lang="ts">
   import { ref, computed, h } from 'vue';
-  import { useRouter, useRoute, RouterLink } from 'vue-router';
+  import { useRoute, RouterLink } from 'vue-router';
+  import { routes } from '@/router';
 
-  const router = useRouter();
   const currentRoute = useRoute();
-  const routes = router.getRoutes();
   const collapsed = ref<boolean>(false);
 
+  const generateMenus = (menus: any[]) => {
+    return menus.filter(item => item.meta).map((item) => {
+      const res = {
+        label: () => h(
+          RouterLink,
+          {
+            to: {
+              name: item.name,
+            }
+          },
+          { default: () => item.meta.name }
+        ),
+        key: item.name,
+      };
+      if (Array.isArray(item.children)) {
+        (res as any).children = generateMenus(item.children);
+      }
+      return res;
+    });
+  };
+
   const menus = computed(() => {
-    return routes.filter(route => route.meta).map((item) => ({
-      label: () => h(
-        RouterLink,
-        {
-          to: {
-            name: item.name,
-          }
-        },
-        { default: () => item.meta.name }
-      ),
-      key: item.name
-    }));
+    return generateMenus(routes);
   });
 
   const selectedKey = computed(() => currentRoute.name);

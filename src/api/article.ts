@@ -15,3 +15,10 @@ export const createArticle = async (data: object) => {
     data
   });
 };
+
+export const deleteById = async (id: number) => {
+  return await http({
+    method: 'delete',
+    url: `/api/article/${id}`,
+  });
+};

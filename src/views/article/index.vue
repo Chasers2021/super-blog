@@ -77,7 +77,7 @@
 <script setup lang="ts">
   import { getTags } from '@/api/tag';
   import { getCategories } from '@/api/category';
-  import { createArticle, findPage } from '@/api/article';
+  import { createArticle } from '@/api/article';
   import { ref, reactive, onMounted } from 'vue';
   import Editor from '@/components/Editor/index.vue';
   import { useNotification, type FormInst } from 'naive-ui';
@@ -119,8 +119,6 @@
   };
 
   const handleSubmit = async () => {
-    console.log(articleBasicForm, 'articleBasicForm');
-    console.log(articleExtraForm, 'articleExtraForm');
     await createArticle({
       ...articleBasicForm,
       categoryIdList: articleExtraForm.categotyIdList,
@@ -135,10 +133,6 @@
   onMounted(() => {
     fetchList();
     fetchCategoryList();
-    findPage({
-      pageSize: 10,
-      page: 1
-    });
   });
 </script>
 
