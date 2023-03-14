@@ -43,7 +43,7 @@ export const routes = [
         component: ArticleList
       },
       {
-        path: '/article/create',
+        path: '/article/create/:id?',
         name: 'createArticle',
         meta: {
           name: '创建文章',

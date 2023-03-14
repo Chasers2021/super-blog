@@ -83,9 +83,15 @@
     });
   };
 
+  const setEditorValue = (content: string) => {
+    editor?.setValue(content);
+  };
+
   onMounted(() => {
     createEditor();
   });
+
+  defineExpose({ setEditorValue });
 </script>
 
 <style lang="less" scoped>

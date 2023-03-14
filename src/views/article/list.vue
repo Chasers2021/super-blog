@@ -16,9 +16,11 @@
 <script setup lang="ts">
   import { NDataTable, NButton, useDialog, useNotification } from 'naive-ui';
   import { ref, reactive, onMounted, h } from 'vue';
+  import { useRouter } from 'vue-router';
   import { findPage, deleteById } from '@/api/article';
   const dialog = useDialog();
   const notification = useNotification();
+  const router = useRouter();
 
   const columns = [
     {
@@ -76,7 +78,11 @@
     list.value = res.data.list;
   });
 
-  const handleEdit = () => {};
+  const handleEdit = (row: any) => {
+    router.push({
+      path: `/article/create/${row.id}`
+    });
+  };
 
   const handleDelete = (row: any) => {
     row.id && dialog.warning({

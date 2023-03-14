@@ -43,7 +43,7 @@
           </n-form-item>
     
           <n-form-item label="内容: " path="content">
-            <editor v-model:editor-content="articleBasicForm.content" />
+            <editor v-model:editor-content="articleBasicForm.content" ref="editorRef" />
           </n-form-item>
         </n-form>
       </n-gi>
@@ -77,11 +77,13 @@
 <script setup lang="ts">
   import { getTags } from '@/api/tag';
   import { getCategories } from '@/api/category';
-  import { createArticle } from '@/api/article';
+  import { createArticle, findById } from '@/api/article';
   import { ref, reactive, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
   import Editor from '@/components/Editor/index.vue';
   import { useNotification, type FormInst } from 'naive-ui';
 
+  const currentRoute = useRoute();
   const notification = useNotification();
   const articleBasicFormRef = ref<FormInst | null>(null);
   const articleExtraFormRef = ref<FormInst | null>(null);
@@ -130,7 +132,16 @@
     });
   };
 
-  onMounted(() => {
+  const editorRef = ref(null);
+  onMounted(async () => {
+    if (currentRoute.params.id) {
+      const res = await findById(currentRoute.params.id as unknown as number);
+      articleBasicForm.content = res.data.result.content;
+      articleBasicForm.title = res.data.result.title;
+      articleBasicForm.description = res.data.result.description;
+      articleExtraForm.categotyIdList = res.data.result.categoryIdList;
+      (editorRef.value as any).setEditorValue(articleBasicForm.content);
+    }
     fetchList();
     fetchCategoryList();
   });

@@ -22,3 +22,10 @@ export const deleteById = async (id: number) => {
     url: `/api/article/${id}`,
   });
 };
+
+export const findById = async (id: number) => {
+  return await http({
+    method: 'get',
+    url: `/api/article/${id}`,
+  });
+};
