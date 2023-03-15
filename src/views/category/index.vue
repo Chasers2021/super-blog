@@ -1,29 +1,30 @@
 <template>
-  <div class="main">
-    <header class="header">
-      分类列表({{ categories.length }})
-      <n-button class="create-button" type="primary" @click="handleCreate">
-        + 创建分类
-      </n-button>
-    </header>
-
-    <main class="main-content">
-      <n-card v-for="item in categories" :key="item.id" class="category-card">
-        <template #header>{{ item.name }}</template>
-
-        <template #header-extra>
-          <n-button text style="margin-right: 8px;" @click="handleEdit(item)">
-            <n-icon size="16"><create-outline /></n-icon>
-            编辑
-          </n-button>
-          <n-button text @click="handleDelete(item)">
-            <n-icon size="16"><trash /></n-icon>
-            删除
-          </n-button>
-        </template>
-
-        <template #default>{{ item.description }}</template>
-      </n-card>
+  <div class="main-content-container">
+    <main class="container">
+      <header class="header">
+        分类列表({{ categories.length }})
+        <n-button class="create-button" type="primary" @click="handleCreate">
+          + 创建分类
+        </n-button>
+      </header>
+      <div class="container-card">
+        <n-card v-for="item in categories" :key="item.id" class="category-card">
+          <template #header>{{ item.name }}</template>
+  
+          <template #header-extra>
+            <n-button text style="margin-right: 8px;" @click="handleEdit(item)">
+              <n-icon size="16"><create-outline /></n-icon>
+              编辑
+            </n-button>
+            <n-button text @click="handleDelete(item)">
+              <n-icon size="16"><trash /></n-icon>
+              删除
+            </n-button>
+          </template>
+  
+          <template #default>{{ item.description }}</template>
+        </n-card>
+      </div>
     </main>
 
     <n-modal
@@ -179,10 +180,8 @@
 </script>
 
 <style lang="less" scoped>
-  .main {
-    padding-left: 20px;
-    background-color: rgb(24, 24, 28);
-    padding-bottom: 20px;
+  .container {
+    width: 100%;
 
     .header {
       height: 60px;
@@ -196,7 +195,7 @@
       }
     }
 
-    &-content {
+    &-card {
       display: flex;
       justify-content: flex-start;
       flex-wrap: wrap;

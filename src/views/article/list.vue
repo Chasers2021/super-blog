@@ -1,15 +1,11 @@
 <template>
-  <div class="main">
-    <header class="header"></header>
-
-    <main class="main-content">
-      <n-data-table
-        :columns="columns"
-        :data="list"
-        :pagination="pagination"
-        :bordered="false"
-      />
-    </main>
+  <div class="main-content-container">
+    <n-data-table
+      :columns="columns"
+      :data="list"
+      :pagination="pagination"
+      :bordered="false"
+    />
   </div>
 </template>
 
@@ -104,7 +100,4 @@
 </script>
 
 <style lang="less" scoped>
-  .main {
-    background-color: rgb(24, 24, 28);
-  }
 </style>

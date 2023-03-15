@@ -1,8 +1,6 @@
 <template>
-  <div class="main">
-    <header class="header"></header>
-
-    <n-grid x-gap="20" style="padding: 12px;">
+  <div class="main-content-container">
+    <n-grid x-gap="20">
       <n-gi :span="17">
         <n-form
           ref="articleBasicFormRef"
@@ -77,7 +75,7 @@
 <script setup lang="ts">
   import { getTags } from '@/api/tag';
   import { getCategories } from '@/api/category';
-  import { createArticle, findById } from '@/api/article';
+  import { createArticle, findById, updateArticle } from '@/api/article';
   import { ref, reactive, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import Editor from '@/components/Editor/index.vue';
@@ -121,11 +119,19 @@
   };
 
   const handleSubmit = async () => {
-    await createArticle({
-      ...articleBasicForm,
-      categoryIdList: articleExtraForm.categotyIdList,
-      tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id)
-    });
+    if (currentRoute.params.id) {
+      await updateArticle({
+        ...articleBasicForm,
+        categoryIdList: articleExtraForm.categotyIdList,
+        tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id)
+      }, currentRoute.params.id as unknown as number);
+    } else {
+      await createArticle({
+        ...articleBasicForm,
+        categoryIdList: articleExtraForm.categotyIdList,
+        tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id)
+      });
+    }
     notification.success({ 
       content: '操作成功!', meta: '该文章完成创建',
       duration: 1500, keepAliveOnHover: true
@@ -134,21 +140,23 @@
 
   const editorRef = ref(null);
   onMounted(async () => {
+    fetchCategoryList();
     if (currentRoute.params.id) {
+      await fetchList();
       const res = await findById(currentRoute.params.id as unknown as number);
       articleBasicForm.content = res.data.result.content;
       articleBasicForm.title = res.data.result.title;
       articleBasicForm.description = res.data.result.description;
       articleExtraForm.categotyIdList = res.data.result.categoryIdList;
+      tagList.value.forEach(tag => {
+        if (res.data.result.tagIdList.find((id: any) => id === tag.id)) tag.checked = true;
+      });
       (editorRef.value as any).setEditorValue(articleBasicForm.content);
+    } else {
+      fetchList();
     }
-    fetchList();
-    fetchCategoryList();
   });
 </script>
 
 <style lang="less" scoped>
-  .main {
-    background-color: rgb(24, 24, 28);
-  }
 </style>

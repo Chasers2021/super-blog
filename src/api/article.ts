@@ -29,3 +29,11 @@ export const findById = async (id: number) => {
     url: `/api/article/${id}`,
   });
 };
+
+export const updateArticle = async (data: object, id: number) => {
+  return await http({
+    method: 'put',
+    url: `/api/article/${id}`,
+    data
+  });
+};

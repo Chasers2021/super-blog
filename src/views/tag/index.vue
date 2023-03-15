@@ -1,20 +1,19 @@
 <template>
-  <div class="main">
-    <header class="header">
-      标签列表({{ total }})
-      <n-button class="create-button" type="primary" @click="handleCreate">
-        + 创建标签
-      </n-button>
-    </header>
-
-    <main class="main-content">
+  <div class="main-content-container">
+    <div class="container">
+      <header class="header">
+        标签列表({{ total }})
+        <n-button class="create-button" type="primary" @click="handleCreate">
+          + 创建标签
+        </n-button>
+      </header>
       <n-data-table
         :columns="columns"
         :data="list"
         :pagination="pagination"
         :bordered="false"
       />
-    </main>
+    </div>
 
     <n-modal
       v-model:show="visible"
@@ -206,10 +205,10 @@
 </script>
 
 <style lang="less" scoped>
-  .main {
-    padding-left: 20px;
-    background-color: rgb(24, 24, 28);
-    padding-bottom: 20px;
+  .main-content-container {
+    .container {
+      width: 100%;
+    }
 
     .header {
       height: 60px;

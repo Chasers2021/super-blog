@@ -4,6 +4,18 @@ const Tag = () => import('@/views/tag/index.vue');
 const Article = () => import('@/views/article/index.vue');
 const ArticleList = () => import('@/views/article/list.vue');
 
+import { h, type Component} from 'vue';
+import { NIcon } from 'naive-ui';
+import {
+  AlbumsOutline,
+  PricetagsOutline,
+  DocumentsOutline
+} from '@vicons/ionicons5';
+
+const renderIcon = (icon: Component) => {
+  return () => h(NIcon, null, { default: () => h(icon) });
+};
+
 export const routes = [
   {
     path: '/',
@@ -16,7 +28,8 @@ export const routes = [
     component: Category,
     meta: {
       name: '分类管理'
-    }
+    },
+    icon: renderIcon(AlbumsOutline)
   },
   {
     path: '/tag',
@@ -24,8 +37,10 @@ export const routes = [
     component: Tag,
     meta: {
       name: '标签管理'
-    }
+    },
+    icon: renderIcon(PricetagsOutline)
   },
+  
   {
     path: '/article',
     name: 'article',
@@ -33,6 +48,7 @@ export const routes = [
     meta: {
       name: '文章管理'
     },
+    icon: renderIcon(DocumentsOutline),
     children: [
       {
         path: '/article/list',
