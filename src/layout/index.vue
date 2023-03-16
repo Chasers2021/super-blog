@@ -31,7 +31,9 @@
       </n-layout-header>
 
       <n-layout-content content-style="padding: 16px;" class="main">
-        <h2 class="title">{{ currentRoute.meta.name }}</h2>
+        <h2 class="title">
+          <icon-compontent class="icon-compontent"/>{{ currentRoute.meta.name }}
+        </h2>
         <main class="main-content">
           <slot />
         </main>
@@ -41,11 +43,11 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, h } from 'vue';
-  import { useRoute, RouterLink } from 'vue-router';
-  import { routes } from '@/router';
-  import logoSrc from '@/assets/logo-user.svg';
   import { EllipsisHorizontalCircle, EllipseOutline } from '@vicons/ionicons5';
+  import { useRoute, RouterLink } from 'vue-router';
+  import logoSrc from '@/assets/logo-user.svg';
+  import { ref, computed, h } from 'vue';
+  import { routes } from '@/router';
 
   const currentRoute = useRoute();
   const collapsed = ref<boolean>(false);
@@ -63,7 +65,7 @@
           { default: () => item.meta.name }
         ),
         key: item.name,
-        icon: item.icon
+        icon: item.meta.useIconForMenu && item.meta.icon
       };
       if (Array.isArray(item.children)) {
         (res as any).children = generateMenus(item.children);
@@ -77,6 +79,7 @@
   });
 
   const selectedKey = computed(() => currentRoute.name);
+  const IconCompontent = computed(() => currentRoute.meta.icon);
 </script>
 
 <style lang="less" scoped>
@@ -115,6 +118,11 @@
     height: calc(100% - 64px);
 
     .title {
+      .icon-compontent {
+        margin-right: 10px;
+        top: 3px;
+      }
+
       height: 80px;
       line-height: 80px;
       padding-left: 16px;

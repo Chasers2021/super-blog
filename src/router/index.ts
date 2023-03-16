@@ -9,10 +9,12 @@ import { NIcon } from 'naive-ui';
 import {
   AlbumsOutline,
   PricetagsOutline,
-  DocumentsOutline
+  DocumentsOutline,
+  ListOutline,
+  ReceiptOutline
 } from '@vicons/ionicons5';
 
-const renderIcon = (icon: Component) => {
+export const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) });
 };
 
@@ -27,18 +29,20 @@ export const routes = [
     name: 'category',
     component: Category,
     meta: {
-      name: '分类管理'
+      name: '分类管理',
+      icon: renderIcon(AlbumsOutline),
+      useIconForMenu: true
     },
-    icon: renderIcon(AlbumsOutline)
   },
   {
     path: '/tag',
     name: 'tag',
     component: Tag,
     meta: {
-      name: '标签管理'
+      name: '标签管理',
+      icon: renderIcon(PricetagsOutline),
+      useIconForMenu: true
     },
-    icon: renderIcon(PricetagsOutline)
   },
   
   {
@@ -46,15 +50,17 @@ export const routes = [
     name: 'article',
     redirect: '/article/list',
     meta: {
-      name: '文章管理'
+      name: '文章管理',
+      icon: renderIcon(DocumentsOutline),
+      useIconForMenu: true
     },
-    icon: renderIcon(DocumentsOutline),
     children: [
       {
         path: '/article/list',
         name: 'articleList',
         meta: {
           name: '文章列表',
+          icon: renderIcon(ListOutline),
         },
         component: ArticleList
       },
@@ -63,6 +69,7 @@ export const routes = [
         name: 'createArticle',
         meta: {
           name: '创建文章',
+          icon: renderIcon(ReceiptOutline),
         },
         component: Article
       }
