@@ -3,6 +3,7 @@ const Category = () => import('@/views/category/index.vue');
 const Tag = () => import('@/views/tag/index.vue');
 const Article = () => import('@/views/article/index.vue');
 const ArticleList = () => import('@/views/article/list.vue');
+const Comment = () => import('@/views/comment/index.vue');
 
 import { h, type Component} from 'vue';
 import { NIcon } from 'naive-ui';
@@ -44,7 +45,6 @@ export const routes = [
       useIconForMenu: true
     },
   },
-  
   {
     path: '/article',
     name: 'article',
@@ -74,7 +74,17 @@ export const routes = [
         component: Article
       }
     ]
-  }
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: Comment,
+    meta: {
+      name: '评论管理',
+      icon: renderIcon(PricetagsOutline),
+      useIconForMenu: true
+    },
+  },
 ];
 
 const router = createRouter({

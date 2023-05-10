@@ -41,7 +41,7 @@
           </n-form-item>
     
           <n-form-item label="内容: " path="content">
-            <editor v-model:editor-content="articleBasicForm.content" ref="editorRef" />
+            <Editor v-model:editor-content="articleBasicForm.content" ref="editorRef" />
           </n-form-item>
         </n-form>
       </n-gi>
@@ -52,8 +52,8 @@
           :model="articleExtraForm"
           :rules="extraRules"
         >    
-          <n-form-item label="分类: ">
-            <n-checkbox-group v-model:value="articleExtraForm.categotyIdList">
+          <n-form-item label="分类: " path="categoryIdList">
+            <n-checkbox-group v-model:value="articleExtraForm.categoryIdList">
               <n-space item-style="display: flex;">
                 <n-checkbox 
                   v-for="item in categoryList" 
@@ -62,6 +62,20 @@
                   :label="item.name" />
               </n-space>
             </n-checkbox-group>
+          </n-form-item>
+          <n-form-item label="缩略图: " path="thumbnailUrl">
+            <n-upload
+              action="/api/file/upload"
+              list-type="image-card"
+              show-download-button
+              v-model:file-list="fileList"
+              class="upload-image"
+              :max="1"
+              @remove="handleRemove"
+              @finish="handleUploaded"
+            >
+              Upload
+            </n-upload>
           </n-form-item>
         </n-form>
         <n-button type="primary" style="width: 100%;" @click="handleSubmit">
@@ -79,7 +93,7 @@
   import { ref, reactive, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import Editor from '@/components/Editor/index.vue';
-  import { useNotification, type FormInst } from 'naive-ui';
+  import { useNotification, type FormInst, type UploadFileInfo } from 'naive-ui';
 
   const currentRoute = useRoute();
   const notification = useNotification();
@@ -97,9 +111,15 @@
   };
 
   const articleExtraForm = reactive({
-    categotyIdList: []
+    categoryIdList: [],
+    thumbnailUrl: ''
   });
-  const extraRules = {};
+
+  const extraRules = {
+    categoryIdList: { type: 'array', required: true, message: '请填写分类', trigger: 'change' },
+    thumbnailUrl: { required: true, message: '请上传', trigger: 'change' }
+  };
+
   const categoryList = ref<any []>([]);
   const fetchCategoryList = async () => {
     const res = await getCategories();
@@ -118,17 +138,32 @@
     });
   };
 
+  const fileList = ref<any []>([]);
+  const handleUploaded = ({ file, event }: { file: UploadFileInfo, event: ProgressEvent }) => {
+    const res = JSON.parse((event.target as XMLHttpRequest).response);
+    file.url = `/static/${res.data.filename}`;
+    articleExtraForm.thumbnailUrl = file.url;
+    return file;
+  };
+
   const handleSubmit = async () => {
+    await Promise.all([
+      articleBasicFormRef.value?.validate(),
+      articleExtraFormRef.value?.validate()
+    ]);
+
     if (currentRoute.params.id) {
       await updateArticle({
         ...articleBasicForm,
-        categoryIdList: articleExtraForm.categotyIdList,
-        tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id)
+        categoryIdList: articleExtraForm.categoryIdList,
+        tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id),
+        thumbnailUrl: articleExtraForm.thumbnailUrl,
       }, currentRoute.params.id as unknown as number);
     } else {
       await createArticle({
         ...articleBasicForm,
-        categoryIdList: articleExtraForm.categotyIdList,
+        categoryIdList: articleExtraForm.categoryIdList,
+        thumbnailUrl: articleExtraForm.thumbnailUrl,
         tagIdList: tagList.value.filter(tag => tag.checked).map(tag => tag.id)
       });
     }
@@ -137,7 +172,9 @@
       duration: 1500, keepAliveOnHover: true
     });
   };
-
+  const handleRemove = () => {
+    articleExtraForm.thumbnailUrl = '';
+  };
   const editorRef = ref(null);
   onMounted(async () => {
     fetchCategoryList();
@@ -147,7 +184,14 @@
       articleBasicForm.content = res.data.result.content;
       articleBasicForm.title = res.data.result.title;
       articleBasicForm.description = res.data.result.description;
-      articleExtraForm.categotyIdList = res.data.result.categoryIdList;
+      articleExtraForm.categoryIdList = res.data.result.categoryIdList;
+      articleExtraForm.thumbnailUrl = res.data.result.thumbnailUrl;
+      if (articleExtraForm.thumbnailUrl) {
+        fileList.value.push({
+          url: articleExtraForm.thumbnailUrl,
+          status: 'finished'
+        });
+      }
       tagList.value.forEach(tag => {
         if (res.data.result.tagIdList.find((id: any) => id === tag.id)) tag.checked = true;
       });
@@ -159,4 +203,23 @@
 </script>
 
 <style lang="less" scoped>
+.upload-image {
+  width: 100%;
+
+  :deep(.n-upload-file-list.n-upload-file-list--grid) {
+    display: block;
+  }
+
+  :deep(.n-upload-file.n-upload-file--image-card-type) {
+    width: 100%;
+    height: auto;
+  }
+
+  :deep(.n-upload-trigger.n-upload-trigger--image-card) {
+    width: 100%;
+    .n-upload-dragger {
+      padding: 36px 0;
+    }
+  }
+}
 </style>

@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 
 export const http: AxiosInstance = axios.create({
-  timeout: 5000,
+  // timeout: 5000,
   baseURL: '/'
 });
 
