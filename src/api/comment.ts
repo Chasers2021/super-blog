@@ -7,3 +7,11 @@ export const findPage = async (params: any) => {
     params
   });
 };
+
+export const updateStatus = async (id: number, data: any) => {
+  return await http({
+    method: 'put',
+    url: `/api/comment/${id}`,
+    data
+  });
+};
