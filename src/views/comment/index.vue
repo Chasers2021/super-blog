@@ -13,7 +13,7 @@
           @update:value="handleUpdateStatus"
         />
       </n-form-item>
-      <n-form-item label="">
+      <n-form-item>
         <n-input v-model:value="form.keyword" placeholder="输入关键词查询" />
       </n-form-item>
       <n-form-item>
@@ -21,10 +21,12 @@
       </n-form-item>
     </n-form>
     <n-data-table
+      remote
       :columns="columns"
       :data="list"
-      :pagination="pagination"
+      :pagination="form.pagination"
       :bordered="false"
+      @update:page="handlePageChange"
     />
   </div>
 </template>
@@ -45,7 +47,12 @@ enum Status {
 
 const form = reactive({
   status: '',
-  keyword: ''
+  keyword: '',
+  pagination: {
+    pageSize: 10,
+    page: 1,
+    itemCount: 0,
+  }
 });
 
 const handleUpdateStatus = () => {
@@ -75,12 +82,9 @@ const statusOptions = ref([
 ]);
 
 const handleSearch = () => {
+  fetch();
+};
 
-};
-const handleClear = () => {
-  form.status = '';
-  console.log('clear');
-};
 const columns = [
   {
     title: 'ID',
@@ -162,14 +166,20 @@ const columns = [
 ];
 
 const list = ref<any []>([]);
-const pagination = reactive({
-  pageSize: 10,
-  page: 1
-});
 
 const fetch = async () => {
-  const res = await findPage(pagination);
+  const res = await findPage({
+    status: form.status,
+    keyword: form.keyword,
+    ...form.pagination
+  });
   list.value = res.data.list;
+  form.pagination.itemCount = res.data.total;
+};
+
+const handlePageChange = async (page: number) => {
+  form.pagination.page = page;
+  await fetch();
 };
 
 const handleClick = async (row: any, status: number) => {
@@ -181,7 +191,7 @@ const handleClick = async (row: any, status: number) => {
   fetch();
 };
 
-onBeforeMount(async () => {
-  await fetch();
+onBeforeMount(() => {
+  fetch();
 });
 </script>

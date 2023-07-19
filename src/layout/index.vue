@@ -1,5 +1,5 @@
 <template>
-  <n-layout has-sider>
+  <n-layout has-sider style="height: 100%;">
     <n-layout-sider
       bordered
       collapse-mode="width"
@@ -35,7 +35,7 @@
           <icon-compontent class="icon-compontent"/>{{ currentRoute.meta.name }}
         </h2>
         <main class="main-content">
-          <slot />
+          <router-view />
         </main>
       </n-layout-content>
     </n-layout>
@@ -75,7 +75,8 @@
   };
 
   const menus = computed(() => {
-    return generateMenus(routes);
+    const list = routes.find(item => item.name === 'layout')?.children || [];
+    return generateMenus(list);
   });
 
   const selectedKey = computed(() => currentRoute.name);

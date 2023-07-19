@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Layout from '@/layout/index.vue';
 const Category = () => import('@/views/category/index.vue');
 const Tag = () => import('@/views/tag/index.vue');
 const Article = () => import('@/views/article/index.vue');
 const ArticleList = () => import('@/views/article/list.vue');
 const Comment = () => import('@/views/comment/index.vue');
+const Login = () => import('@/views/login/index.vue');
 
 import { h, type Component} from 'vue';
 import { NIcon } from 'naive-ui';
@@ -22,68 +24,81 @@ export const renderIcon = (icon: Component) => {
 export const routes = [
   {
     path: '/',
-    name: 'root',
-    redirect: 'category'
+    name: 'home',
+    redirect: '/category'
   },
   {
-    path: '/category',
-    name: 'category',
-    component: Category,
-    meta: {
-      name: '分类管理',
-      icon: renderIcon(AlbumsOutline),
-      useIconForMenu: true
-    },
+    path: '/login',
+    name: 'login',
+    component: Login,
   },
   {
-    path: '/tag',
-    name: 'tag',
-    component: Tag,
-    meta: {
-      name: '标签管理',
-      icon: renderIcon(PricetagsOutline),
-      useIconForMenu: true
-    },
-  },
-  {
-    path: '/article',
-    name: 'article',
-    redirect: '/article/list',
-    meta: {
-      name: '文章管理',
-      icon: renderIcon(DocumentsOutline),
-      useIconForMenu: true
-    },
+    path: '/layout',
+    name: 'layout',
+    component: Layout,
+    redirect: '/category',
     children: [
       {
-        path: '/article/list',
-        name: 'articleList',
+        path: '/category',
+        name: 'category',
+        component: Category,
         meta: {
-          name: '文章列表',
-          icon: renderIcon(ListOutline),
+          name: '分类管理',
+          icon: renderIcon(AlbumsOutline),
+          useIconForMenu: true
         },
-        component: ArticleList
       },
       {
-        path: '/article/create/:id?',
-        name: 'createArticle',
+        path: '/tag',
+        name: 'tag',
+        component: Tag,
         meta: {
-          name: '创建文章',
-          icon: renderIcon(ReceiptOutline),
+          name: '标签管理',
+          icon: renderIcon(PricetagsOutline),
+          useIconForMenu: true
         },
-        component: Article
+      },
+      {
+        path: '/article',
+        name: 'article',
+        redirect: '/article/list',
+        meta: {
+          name: '文章管理',
+          icon: renderIcon(DocumentsOutline),
+          useIconForMenu: true
+        },
+        children: [
+          {
+            path: '/article/list',
+            name: 'articleList',
+            meta: {
+              name: '文章列表',
+              icon: renderIcon(ListOutline),
+            },
+            component: ArticleList
+          },
+          {
+            path: '/article/create/:id?',
+            name: 'createArticle',
+            meta: {
+              name: '创建文章',
+              icon: renderIcon(ReceiptOutline),
+            },
+            component: Article
+          }
+        ]
+      },
+      {
+        path: '/comment',
+        name: 'comment',
+        component: Comment,
+        meta: {
+          name: '评论管理',
+          icon: renderIcon(PricetagsOutline),
+          useIconForMenu: true
+        },
       }
     ]
-  },
-  {
-    path: '/comment',
-    name: 'comment',
-    component: Comment,
-    meta: {
-      name: '评论管理',
-      icon: renderIcon(PricetagsOutline),
-      useIconForMenu: true
-    },
   },
 ];
 
