@@ -3,7 +3,7 @@ import { http } from '@/plugins';
 export const findPage = async (params: any) => {
   return await http({
     method: 'get',
-    url: '/api/article',
+    url: '/article',
     params
   });
 };
@@ -11,7 +11,7 @@ export const findPage = async (params: any) => {
 export const createArticle = async (data: object) => {
   return await http({
     method: 'post',
-    url: '/api/article',
+    url: '/article',
     data
   });
 };
@@ -19,21 +19,21 @@ export const createArticle = async (data: object) => {
 export const deleteById = async (id: number) => {
   return await http({
     method: 'delete',
-    url: `/api/article/${id}`,
+    url: `/article/${id}`,
   });
 };
 
 export const findById = async (id: number) => {
   return await http({
     method: 'get',
-    url: `/api/article/${id}`,
+    url: `/article/${id}`,
   });
 };
 
 export const updateArticle = async (data: object, id: number) => {
   return await http({
     method: 'put',
-    url: `/api/article/${id}`,
+    url: `/article/${id}`,
     data
   });
 };

@@ -3,7 +3,7 @@ import { http } from '@/plugins';
 export const findPage = async (params: any) => {
   return await http({
     method: 'get',
-    url: '/api/comment',
+    url: '/comment',
     params
   });
 };
@@ -11,7 +11,7 @@ export const findPage = async (params: any) => {
 export const updateStatus = async (id: number, data: any) => {
   return await http({
     method: 'put',
-    url: `/api/comment/${id}`,
+    url: `/comment/${id}`,
     data
   });
 };

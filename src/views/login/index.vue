@@ -44,6 +44,7 @@ import { PersonCircleOutline, KeyOutline } from '@vicons/ionicons5';
 import type { FormInst } from 'naive-ui';
 import { getPublicKey, login } from '@/api/rsa';
 import JSEncrypt from 'jsencrypt';
+import { useRouter } from 'vue-router';
 
 const form = reactive({
   account: '',
@@ -62,6 +63,7 @@ const rules = {
   }
 };
 const formRef =  ref<FormInst | null>(null);
+const router = useRouter();
 const handleLogin = async () => {
   await formRef.value?.validate();
   const res = await getPublicKey();
@@ -73,6 +75,7 @@ const handleLogin = async () => {
     ...form,
     password
   });
+  router.push({ path: '/' });
 };
 </script>
 

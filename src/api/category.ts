@@ -3,14 +3,14 @@ import { http } from '@/plugins';
 export const getCategories = async () => {
   return await http({
     method: 'get',
-    url: '/api/category'
+    url: '/category'
   });
 };
 
 export const createCategory = async (data: object) => {
   return await http({
     method: 'post',
-    url: '/api/category',
+    url: '/category',
     data
   });
 };
@@ -18,7 +18,7 @@ export const createCategory = async (data: object) => {
 export const updateCategoty = async (id: number, data: object) => {
   return await http({
     method: 'put',
-    url: `/api/category/${id}`,
+    url: `/category/${id}`,
     data
   });
 };
@@ -26,6 +26,6 @@ export const updateCategoty = async (id: number, data: object) => {
 export const deleteCategoty = async (id: number) => {
   return await http({
     method: 'delete',
-    url: `/api/category/${id}`,
+    url: `/category/${id}`,
   });
 };
