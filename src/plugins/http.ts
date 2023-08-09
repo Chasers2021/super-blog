@@ -3,10 +3,13 @@ import axios, {
   type AxiosRequestConfig, 
   type AxiosResponse 
 } from 'axios';
+import router from '@/router';
+
 
 export const http: AxiosInstance = axios.create({
   // timeout: 5000,
-  baseURL: '/api'
+  baseURL: '/api',
+  headers: { 'Auth': 'true' }
 });
 
 http.interceptors.request.use(
@@ -23,6 +26,9 @@ http.interceptors.response.use(
     return response.data;
   },
   error => {
+    if (error.response.status === 403) {
+      router.push({ path: '/login' });
+    }
     return Promise.reject(error);
   }
 );
