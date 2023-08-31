@@ -50,6 +50,28 @@
               placeholder="输入名称" 
             />
           </n-form-item>
+          <n-form-item label="背景图: " path="backgroundUrl">
+            <n-upload
+              action="/api/file/upload"
+              list-type="image-card"
+              show-download-button
+              :headers="uploadHeaders"
+              v-model:file-list="fileList"
+              class="upload-image"
+              :max="1"
+              @remove="handleRemove"
+              @finish="handleUploaded"
+            >
+              Upload
+            </n-upload>
+          </n-form-item>
+          <n-form-item label="icon: " path="icon">
+            <n-input 
+              v-model:value="categoryForm.icon" 
+              clearable
+              :allow-input="inputTrim" 
+            />
+          </n-form-item>
           <n-form-item label="描述: ">
             <n-input
               v-model:value="categoryForm.description" 
@@ -79,7 +101,7 @@
     deleteCategoty
   } from '@/api/category';
   import { Trash, CreateOutline } from '@vicons/ionicons5';
-  import { useDialog, useNotification, type FormInst } from 'naive-ui';
+  import { useDialog, useNotification, type FormInst, type UploadFileInfo } from 'naive-ui';
 
   const dialog = useDialog();
   const notification = useNotification();
@@ -87,7 +109,9 @@
   interface Category {
     name: string,
     id?: number,
-    description: string
+    description: string,
+    backgroundUrl: string,
+    icon: string
   }
 
   const categories = ref<Category[]>([]);
@@ -108,22 +132,45 @@
       required: true,
       message: '请输入名称',
       trigger: 'blur'
+    },
+    backgroundUrl: {
+      required: true,
+      message: '请上传',
+      trigger: 'blur'
     }
   };
-
+  const uploadHeaders = {
+    Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
+  };
   const categoryFormRef = ref<FormInst | null>(null);
   const categoryForm = reactive({
     name: '',
     description: '',
-    id: null
+    id: null,
+    backgroundUrl: '',
+    icon: ''
   });
 
   const inputTrim = (value: string) => !value.startsWith(' ') && !value.endsWith(' ');
+  const fileList = ref<any []>([]);
+  const handleRemove = () => {
+    categoryForm.backgroundUrl = '';
+    fileList.value = [];
+  };
+
+  const handleUploaded = ({ file, event }: { file: UploadFileInfo, event: ProgressEvent }) => {
+    const res = JSON.parse((event.target as XMLHttpRequest).response);
+    file.url = `/static/${res.data.filename}`;
+    categoryForm.backgroundUrl = file.url;
+    return file;
+  };
 
   const close = () => {
     categoryForm.name = '';
     categoryForm.description = '';
     categoryForm.id = null;
+    categoryForm.backgroundUrl = '';
+    categoryForm.icon = '';
   };
 
   const isUpdate = computed(() => categoryForm.id);
@@ -157,6 +204,16 @@
     categoryForm.name = category.name;
     categoryForm.description = category.description;
     categoryForm.id = category.id as any;
+    categoryForm.backgroundUrl = category.backgroundUrl;
+    categoryForm.icon = category.icon;
+    if (categoryForm.backgroundUrl) {
+      fileList.value = [{
+        url: categoryForm.backgroundUrl,
+        status: 'finished'
+      }];
+    } else {
+      fileList.value = [];
+    }
   };
 
   const handleDelete = (category: Category) => {

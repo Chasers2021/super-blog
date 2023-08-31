@@ -42,7 +42,7 @@
 import { reactive, ref } from 'vue';
 import { PersonCircleOutline, KeyOutline } from '@vicons/ionicons5';
 import type { FormInst } from 'naive-ui';
-import { getPublicKey, login } from '@/api/rsa';
+import { getPublicKey, login } from '@/api/auth';
 import JSEncrypt from 'jsencrypt';
 import { useRouter } from 'vue-router';
 
@@ -71,10 +71,11 @@ const handleLogin = async () => {
   const encryptor = new JSEncrypt();
   encryptor.setPublicKey(publicKey);
   const password = encryptor.encrypt(form.password);
-  await login({
+  const loginResp = await login({
     ...form,
     password
   });
+  localStorage.setItem('Authorization', loginResp.data.token);
   router.push({ path: '/' });
 };
 </script>

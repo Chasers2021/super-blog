@@ -3,14 +3,14 @@ import { http } from '@/plugins';
 export const getPublicKey = async () => {
   return await http({ 
     method: 'get',
-    url: '/rsa',
+    url: '/auth/publicKey',
   });
 };
 
 export const login = async (data: object) => {
   return await http({ 
     method: 'post',
-    url: '/rsa',
+    url: '/auth/login',
     data
   });
 };
