@@ -68,6 +68,7 @@
               action="/api/file/upload"
               list-type="image-card"
               show-download-button
+              :headers="uploadHeaders"
               v-model:file-list="fileList"
               class="upload-image"
               :max="1"
@@ -139,6 +140,9 @@
   };
 
   const fileList = ref<any []>([]);
+  const uploadHeaders = {
+    Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
+  };
   const handleUploaded = ({ file, event }: { file: UploadFileInfo, event: ProgressEvent }) => {
     const res = JSON.parse((event.target as XMLHttpRequest).response);
     file.url = `/static/${res.data.filename}`;

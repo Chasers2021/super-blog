@@ -1,10 +1,12 @@
 <template>
   <div class="main-content-container">
     <n-data-table
+      remote
       :columns="columns"
       :data="list"
       :pagination="pagination"
       :bordered="false"
+      @update:page="handlePageChange"
     />
   </div>
 </template>
@@ -66,13 +68,23 @@
   const list = ref<any []>([]);
   const pagination = reactive({
     pageSize: 10,
-    page: 1
+    page: 1,
+    itemCount: 0
   });
 
   onMounted(async () => {
     const res = await findPage(pagination);
     list.value = res.data.list;
+    pagination.itemCount = res.data.total;
   });
+
+  
+const handlePageChange = async (page: number) => {
+  pagination.page = page;
+  const res = await findPage(pagination);
+  list.value = res.data.list;
+  pagination.itemCount = res.data.total;
+};
 
   const handleEdit = (row: any) => {
     router.push({
@@ -94,6 +106,7 @@
         });
         const res = await findPage(pagination);
         list.value = res.data.list;
+        pagination.itemCount = res.data.total;
       }
     });
   };

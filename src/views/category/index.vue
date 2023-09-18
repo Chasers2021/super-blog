@@ -50,6 +50,14 @@
               placeholder="输入名称" 
             />
           </n-form-item>
+          <n-form-item label="code: " path="code">
+            <n-input 
+              v-model:value="categoryForm.code" 
+              clearable
+              :allow-input="inputTrim" 
+              placeholder="请输入" 
+            />
+          </n-form-item>
           <n-form-item label="背景图: " path="backgroundUrl">
             <n-upload
               action="/api/file/upload"
@@ -108,6 +116,7 @@
 
   interface Category {
     name: string,
+    code: string,
     id?: number,
     description: string,
     backgroundUrl: string,
@@ -137,7 +146,12 @@
       required: true,
       message: '请上传',
       trigger: 'blur'
-    }
+    },
+    code: {
+      required: true,
+      message: '请输入',
+      trigger: 'blur'
+    },
   };
   const uploadHeaders = {
     Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
@@ -145,6 +159,7 @@
   const categoryFormRef = ref<FormInst | null>(null);
   const categoryForm = reactive({
     name: '',
+    code: '',
     description: '',
     id: null,
     backgroundUrl: '',
@@ -171,6 +186,7 @@
     categoryForm.id = null;
     categoryForm.backgroundUrl = '';
     categoryForm.icon = '';
+    categoryForm.code = '';
   };
 
   const isUpdate = computed(() => categoryForm.id);
@@ -206,6 +222,7 @@
     categoryForm.id = category.id as any;
     categoryForm.backgroundUrl = category.backgroundUrl;
     categoryForm.icon = category.icon;
+    categoryForm.code = category.code;
     if (categoryForm.backgroundUrl) {
       fileList.value = [{
         url: categoryForm.backgroundUrl,
