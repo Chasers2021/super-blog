@@ -38,6 +38,36 @@
               placeholder="输入名称" 
             />
           </n-form-item>
+          <n-form-item label="code: " path="code">
+            <n-input 
+              v-model:value="tagForm.code" 
+              clearable
+              :allow-input="inputTrim" 
+              placeholder="请输入" 
+            />
+          </n-form-item>
+          <n-form-item label="背景图: " path="backgroundUrl">
+            <n-upload
+              action="/api/file/upload"
+              list-type="image-card"
+              show-download-button
+              :headers="uploadHeaders"
+              v-model:file-list="fileList"
+              class="upload-image"
+              :max="1"
+              @remove="handleRemove"
+              @finish="handleUploaded"
+            >
+              Upload
+            </n-upload>
+          </n-form-item>
+          <n-form-item label="icon: " path="icon">
+            <n-input 
+              v-model:value="tagForm.icon" 
+              clearable
+              :allow-input="inputTrim" 
+            />
+          </n-form-item>
           <n-form-item label="描述: ">
             <n-input
               v-model:value="tagForm.description" 
@@ -61,7 +91,18 @@
 <script setup lang="ts">
   import { getTags, createTag, updateTag, deleteTag } from '@/api/tag';
   import { computed, onMounted, reactive, ref, h } from 'vue';
-  import { NButton, NDataTable, NForm, NFormItem, NInput, NModal, useDialog, useNotification, type FormInst } from 'naive-ui';
+  import {
+    NButton,
+    NDataTable,
+    NForm,
+    NFormItem,
+    NInput,
+    NModal,
+    useDialog,
+    useNotification,
+    type FormInst,
+    type UploadFileInfo
+  } from 'naive-ui';
 
   const dialog = useDialog();
   const notification = useNotification();
@@ -126,15 +167,43 @@
   const isUpdate = computed(() => tagForm.id);
   const tagTitle = computed(() => isUpdate.value ? '编辑标签' : '新标签');
 
+  const uploadHeaders = {
+    Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
+  };
+
+  const fileList = ref<any []>([]);
   const tagForm = reactive({
     name: '',
     description: '',
-    id: null
+    id: null,
+    code: '',
+    icon: '',
+    backgroundUrl: ''
   });
+
+  const handleRemove = () => {
+    tagForm.backgroundUrl = '';
+    fileList.value = [];
+  };
+
+  const handleUploaded = ({ file, event }: { file: UploadFileInfo, event: ProgressEvent }) => {
+    const res = JSON.parse((event.target as XMLHttpRequest).response);
+    file.url = `/static/${res.data.filename}`;
+    tagForm.backgroundUrl = file.url;
+    return file;
+  };
 
   const handleEdit = (row: any) => {
     visible.value = true;
     Object.assign(tagForm,  row);
+    if (tagForm.backgroundUrl) {
+      fileList.value = [{
+        url: tagForm.backgroundUrl,
+        status: 'finished'
+      }];
+    } else {
+      fileList.value = [];
+    }
   };
 
   const handleDelete = (row: any) => {
@@ -160,6 +229,9 @@
     tagForm.name = '';
     tagForm.description = '';
     tagForm.id = null;
+    tagForm.icon = '';
+    tagForm.code = '';
+    tagForm.backgroundUrl = '';
   };
 
   const handleCancel = () => {
